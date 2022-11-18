@@ -1,0 +1,17 @@
+</Localhost>
+  <SQL>
+    <Fetch>
+      KEY: DAVINKIPROGRAMMA
+      FILE: LOCALSEL
+      DEST: TRANSMIT
+    <Fetch>
+    <Push>
+      KEY: DAVINKIPROGRAMMA
+      FILE: LOCALSEL
+      ARG: arg var void push.var(new(compare[Foto, Video, Text].exec.LOCALSEL))
+    <Push>
+  <SQL>
+</Localhost>
+<Push>
+  exec LOCALHOST.PUSH()
+<Push>
