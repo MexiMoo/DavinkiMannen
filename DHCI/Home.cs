@@ -92,15 +92,14 @@ namespace DHCI
                 }
 
                 //Filters out the junk
-                int startPos = webData.LastIndexOf("    <Version>") + "    <Version>".Length;
-                int length = webData.IndexOf("</Version>") - startPos;
+                int startPos = webData.LastIndexOf("    <ApplicationVersion>") + "    <ApplicationVersion>".Length;
+                int length = webData.IndexOf(".%2a</ApplicationVersion>") - startPos;
                 string onlineAppVersion = webData.Substring(startPos, length);
 
                 //Will ry to receive data from the app that is stored
                 RegistryKey key = Registry.CurrentUser.OpenSubKey(@"MRO");
                 if (key != null)
                 {
-                    var AppIsInstalled = key.GetValue("SMPbetaInstalled");
                     var AppVersion = key.GetValue("Version");
                     key.Close();
 
@@ -111,7 +110,7 @@ namespace DHCI
                     //Compares the versions
                     if (appVersionLocal != onlineAppVersion)
                     {
-
+                        //update
                     }
                     else
                     {
