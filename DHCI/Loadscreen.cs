@@ -12,6 +12,8 @@ namespace DHCI
 {
     partial class Loadscreen : Form
     {
+        private System.Windows.Forms.Timer tmr;
+
         public Loadscreen()
         {
             InitializeComponent();
@@ -24,34 +26,50 @@ namespace DHCI
                 this.BackColor = SystemColors.Control;
             }
 
-            //Gets raw data from the project
             System.Net.WebClient ginf = new System.Net.WebClient();
+            
 
-            //Using this in a <try/catch> so the program won't crash if there is no internet.
-            byte[] raw = ginf.DownloadData("https://pastebin.com/raw/TpE9d9h4");
-
-            string webData = System.Text.Encoding.UTF8.GetString(raw);
-
-            //Extracts one line
-            string GetLine(string text, int lineNo)
+            try
             {
-                string[] lines = text.Replace("\r", "").Split('\n');
-                return lines.Length >= lineNo ? lines[lineNo - 1] : null;
+                byte[] raw = ginf.DownloadData("https://raw.githubusercontent.com/MexiMoo/DavinkiMannen/master/DavinkiData");
+                CI();
+            }
+            catch
+            {
+                var NI = new NI();
+                NI.ShowDialog();
             }
 
-            Title.Text = GetLine(webData, 2);
-            Description.Text = GetLine(webData, 8);
-            VSN.Text = GetLine(webData, 5);
-            Logo.ImageLocation = "https://" + GetLine(webData, 11);
+        void CI()
+            {
+                byte[] raw = ginf.DownloadData("https://raw.githubusercontent.com/MexiMoo/DavinkiMannen/master/DavinkiData");
+                string webData = System.Text.Encoding.UTF8.GetString(raw);
 
-            LB.Value = LoadTimer.Interval;
-            LB.Value = LoadTimer.Interval;
-            LB.Value = LoadTimer.Interval;
+                string GetLine(string text, int lineNo)
+                {
+                    string[] lines = text.Replace("\r", "").Split('\n');
+                    return lines.Length >= lineNo ? lines[lineNo - 1] : null;
+                }
 
-            this.Hide();
-            var form2 = new Home();
-            form2.Closed += (s, args) => this.Close();
-            form2.Show();
+                Title.Text = GetLine(webData, 4);
+                Description.Text = GetLine(webData, 10);
+                VSN.Text = GetLine(webData, 7);
+                Logo.ImageLocation = GetLine(webData, 13);
+
+                LB.Value = LoadTimer.Interval;
+                LB.Value = LoadTimer.Interval;
+                LB.Value = LoadTimer.Interval;
+
+                tmr = new System.Windows.Forms.Timer();
+                tmr.Tick += delegate {
+                    tmr.Stop();
+                    this.Hide();
+                    var form2 = new Home();
+                    form2.ShowDialog();
+                };
+                tmr.Interval = (int)TimeSpan.FromSeconds(6).TotalMilliseconds;
+                tmr.Start();
+            }
         }
     }
 }

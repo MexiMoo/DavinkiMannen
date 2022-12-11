@@ -29,14 +29,15 @@
         {
             this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.VSN = new System.Windows.Forms.Label();
             this.Logo = new System.Windows.Forms.PictureBox();
             this.Title = new System.Windows.Forms.Label();
             this.Description = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.LoadTimer = new System.Windows.Forms.Timer(this.components);
-            this.LB = new System.Windows.Forms.ProgressBar();
             this.label1 = new System.Windows.Forms.Label();
-            this.VSN = new System.Windows.Forms.Label();
+            this.LB = new System.Windows.Forms.ProgressBar();
+            this.LoadTimer = new System.Windows.Forms.Timer(this.components);
+            this.LoadExit = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Logo)).BeginInit();
             this.panel2.SuspendLayout();
@@ -51,6 +52,16 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(100, 265);
             this.panel1.TabIndex = 0;
+            // 
+            // VSN
+            // 
+            this.VSN.AutoSize = true;
+            this.VSN.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.VSN.Location = new System.Drawing.Point(0, 252);
+            this.VSN.Name = "VSN";
+            this.VSN.Size = new System.Drawing.Size(22, 13);
+            this.VSN.TabIndex = 1;
+            this.VSN.Text = "1.0";
             // 
             // Logo
             // 
@@ -97,18 +108,6 @@
             this.panel2.Size = new System.Drawing.Size(317, 81);
             this.panel2.TabIndex = 3;
             // 
-            // LoadTimer
-            // 
-            this.LoadTimer.Enabled = true;
-            // 
-            // LB
-            // 
-            this.LB.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.LB.Location = new System.Drawing.Point(0, 58);
-            this.LB.Name = "LB";
-            this.LB.Size = new System.Drawing.Size(317, 23);
-            this.LB.TabIndex = 0;
-            // 
             // label1
             // 
             this.label1.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -120,15 +119,21 @@
             this.label1.Text = "Bezig met verbinden...";
             this.label1.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             // 
-            // VSN
+            // LB
             // 
-            this.VSN.AutoSize = true;
-            this.VSN.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.VSN.Location = new System.Drawing.Point(0, 252);
-            this.VSN.Name = "VSN";
-            this.VSN.Size = new System.Drawing.Size(22, 13);
-            this.VSN.TabIndex = 1;
-            this.VSN.Text = "1.0";
+            this.LB.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.LB.Location = new System.Drawing.Point(0, 58);
+            this.LB.Name = "LB";
+            this.LB.Size = new System.Drawing.Size(317, 23);
+            this.LB.TabIndex = 0;
+            // 
+            // LoadTimer
+            // 
+            this.LoadTimer.Enabled = true;
+            // 
+            // LoadExit
+            // 
+            this.LoadExit.Enabled = true;
             // 
             // Loadscreen
             // 
@@ -168,5 +173,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ProgressBar LB;
         private System.Windows.Forms.Label VSN;
+        private System.Windows.Forms.Timer LoadExit;
     }
 }
