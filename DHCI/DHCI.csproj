@@ -93,11 +93,11 @@
     <Compile Include="Foto.Designer.cs">
       <DependentUpon>Foto.cs</DependentUpon>
     </Compile>
-    <Compile Include="Home.cs">
+    <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Home.Designer.cs">
-      <DependentUpon>Home.cs</DependentUpon>
+    <Compile Include="Main.Designer.cs">
+      <DependentUpon>Main.cs</DependentUpon>
     </Compile>
     <Compile Include="Loadscreen.cs">
       <SubType>Form</SubType>
@@ -125,8 +125,8 @@
     <EmbeddedResource Include="Foto.resx">
       <DependentUpon>Foto.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Home.resx">
-      <DependentUpon>Home.cs</DependentUpon>
+    <EmbeddedResource Include="Main.resx">
+      <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Loadscreen.resx">
       <DependentUpon>Loadscreen.cs</DependentUpon>

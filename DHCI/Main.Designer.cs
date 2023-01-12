@@ -1,6 +1,6 @@
 ﻿namespace DHCI
 {
-    partial class Home
+    partial class Main
     {
         /// <summary>
         /// Required designer variable.
@@ -34,7 +34,6 @@
             this.Tab = new System.Windows.Forms.TabControl();
             this.TB1 = new System.Windows.Forms.TabPage();
             this.TB2 = new System.Windows.Forms.TabPage();
-            this.ADM = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.BTN4 = new System.Windows.Forms.Button();
             this.BTN3 = new System.Windows.Forms.Button();
@@ -127,7 +126,6 @@
             // SDbar
             // 
             this.SDbar.Controls.Add(this.panel3);
-            this.SDbar.Controls.Add(this.ADM);
             this.SDbar.Controls.Add(this.panel2);
             this.SDbar.Controls.Add(this.BTN4);
             this.SDbar.Controls.Add(this.BTN3);
@@ -144,16 +142,16 @@
             // 
             this.panel3.Controls.Add(this.Tab);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(10, 429);
+            this.panel3.Location = new System.Drawing.Point(0, 429);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(110, 21);
+            this.panel3.Size = new System.Drawing.Size(120, 21);
             this.panel3.TabIndex = 3;
             // 
             // Tab
             // 
             this.Tab.Controls.Add(this.TB1);
             this.Tab.Controls.Add(this.TB2);
-            this.Tab.Location = new System.Drawing.Point(65, 2);
+            this.Tab.Location = new System.Drawing.Point(75, 2);
             this.Tab.Multiline = true;
             this.Tab.Name = "Tab";
             this.Tab.SelectedIndex = 0;
@@ -181,20 +179,6 @@
             this.TB2.TabIndex = 1;
             this.TB2.Text = "PT";
             this.TB2.UseVisualStyleBackColor = true;
-            // 
-            // ADM
-            // 
-            this.ADM.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.ADM.Dock = System.Windows.Forms.DockStyle.Left;
-            this.ADM.FlatAppearance.BorderSize = 0;
-            this.ADM.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ADM.Location = new System.Drawing.Point(0, 438);
-            this.ADM.Name = "ADM";
-            this.ADM.Size = new System.Drawing.Size(10, 12);
-            this.ADM.TabIndex = 5;
-            this.ADM.TabStop = false;
-            this.ADM.UseVisualStyleBackColor = false;
-            this.ADM.Click += new System.EventHandler(this.ADM_Click);
             // 
             // panel2
             // 
@@ -275,6 +259,7 @@
             this.Logo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.Logo.TabIndex = 0;
             this.Logo.TabStop = false;
+            this.Logo.Click += new System.EventHandler(this.Logo_Click);
             // 
             // PT
             // 
@@ -871,7 +856,7 @@
             this.notifyIcon1.Text = "Notify_Icon";
             this.notifyIcon1.Visible = true;
             // 
-            // Home
+            // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -880,7 +865,7 @@
             this.Controls.Add(this.TC);
             this.HelpButton = true;
             this.MinimumSize = new System.Drawing.Size(816, 489);
-            this.Name = "Home";
+            this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.SDbar.ResumeLayout(false);
@@ -927,7 +912,6 @@
         private System.Windows.Forms.Button BTN4;
         private System.Windows.Forms.Button BTN3;
         private System.Windows.Forms.Button BTN2;
-        private System.Windows.Forms.Button ADM;
         private System.Windows.Forms.PictureBox Foto;
         private System.Windows.Forms.TabPage TB2;
         private System.Windows.Forms.TabPage TB1;

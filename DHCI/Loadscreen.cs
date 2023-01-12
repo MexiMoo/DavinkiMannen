@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -14,9 +15,22 @@ namespace DHCI
     {
         private System.Windows.Forms.Timer tmr;
 
+        [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
+
+        private static extern IntPtr CreateRoundRectRgn
+            (
+            int nLeftRect,
+            int nTopRect,
+            int nRightRect,
+            int nBottomRect,
+            int nWidthEllipse,
+            int nHeightEllipse
+            );
+
         public Loadscreen()
         {
             InitializeComponent();
+            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
             if (Properties.Settings.Default.Darkmode == true)
             {
                 this.BackColor = Color.FromArgb(36, 36, 36);
@@ -64,7 +78,7 @@ namespace DHCI
                 tmr.Tick += delegate {
                     tmr.Stop();
                     this.Hide();
-                    var form2 = new Home();
+                    var form2 = new Main();
                     form2.ShowDialog();
                 };
                 tmr.Interval = (int)TimeSpan.FromSeconds(6).TotalMilliseconds;

@@ -21,10 +21,11 @@ using DHCI.Properties;
 using System.Runtime.InteropServices.ComTypes;
 using Microsoft.Win32;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace DHCI
 {
-    partial class Home : Form
+    partial class Main : Form
     {
         private Timer tmr;
         private DownloadProgressChangedEventHandler wc_DownloadProgressChanged;
@@ -32,20 +33,18 @@ namespace DHCI
 
         public string Link { get; private set; }
 
-        public Home()
+        public Main()
         {
             InitializeComponent();
             if (Properties.Settings.Default.Darkmode == true)
             {
                 this.BackColor = Color.FromArgb(36, 36, 36);
-                ADM.BackColor = Color.FromArgb(36, 36, 36);
                 PT.BackColor = Color.FromArgb(50, 50, 50);
                 CE.BackColor = Color.FromArgb(36, 36, 36);
             }
             else
             {
                 this.BackColor = SystemColors.Control;
-                ADM.BackColor = SystemColors.Control;
                 PT.BackColor = SystemColors.Control;
                 CE.BackColor = SystemColors.Control;
             }
@@ -56,7 +55,7 @@ namespace DHCI
             var startTimeSpan = TimeSpan.Zero;
             var periodTimeSpan = TimeSpan.FromMinutes(10);
 
-            var timer = new System.Threading.Timer((e) =>
+            var timer = new System.Threading.Timer((f) =>
             {
                 doUpdate();
             }, null, startTimeSpan, periodTimeSpan);
@@ -81,20 +80,19 @@ namespace DHCI
             //Using this in a try/catch so the program won't crash if there is no internet.
             try
             {
-                byte[] raw = wc.DownloadData("https://raw.githubusercontent.com/MexiMoo/DavinkiMannen/master/DHCI/DHCI.csproj");
+                System.Net.WebClient ginf = new System.Net.WebClient();
+
+                byte[] raw = ginf.DownloadData("https://raw.githubusercontent.com/MexiMoo/DavinkiMannen/master/DavinkiData");
+
                 string webData = System.Text.Encoding.UTF8.GetString(raw);
 
-                //Extracts one line
                 string GetLine(string text, int lineNo)
                 {
                     string[] lines = text.Replace("\r", "").Split('\n');
                     return lines.Length >= lineNo ? lines[lineNo - 1] : null;
                 }
 
-                //Filters out the junk
-                int startPos = webData.LastIndexOf("    <ApplicationVersion>") + "    <ApplicationVersion>".Length;
-                int length = webData.IndexOf(".%2a</ApplicationVersion>") - startPos;
-                string onlineAppVersion = webData.Substring(startPos, length);
+                string onlineAppVersion = GetLine(webData, 35);
 
                 //Will ry to receive data from the app that is stored
                 RegistryKey key = Registry.CurrentUser.OpenSubKey(@"MRO");
@@ -199,11 +197,6 @@ namespace DHCI
             Process.Start("https://github.com/MexiMoo/DavinkiMannen/blob/master/DavinkiData");
         }
 
-        private void ADM_Click(object sender, EventArgs e)
-        {
-            Tab.Visible = true;
-        }
-
         private void PT_IMAGE_RB_MouseClick(object sender, MouseEventArgs e)
         {
             PT_VIDEO_RB.Checked = false;
@@ -237,7 +230,7 @@ namespace DHCI
             PT_SEND_P.Checked = true;
         }
 
-        private void PT_Send_Click(object sender, EventArgs e)
+        private async void PT_Send_Click(object sender, EventArgs e)
         {
             if (PT_SEND_L.Checked == true)
             {
@@ -247,9 +240,42 @@ namespace DHCI
             }
             else 
             {
-                string DST_V = "alle verbonden PC's";
-                DATA_SENT_TITLE.Text = ("De data is verzonden naar " + DST_V + " met sucess!");
-                PT_Send_Done.Visible = true;
+                try
+                {
+                    var owner = "MexiMoo";
+                    var repo = "DavinkiMannen";
+                    var branch = "master";
+                    var github = new GitHubClient(new ProductHeaderValue("AppData"));
+                    github.Credentials = new Credentials("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");
+
+                    var currentFileText = "";
+
+                    var contents = await github.Repository.Content.GetAllContentsByRef(owner, repo, "DavinkiServerPush.xml", branch);
+                    var targetFile = contents[0];
+                    if (targetFile.EncodedContent != null)
+                    {
+                        currentFileText = Encoding.UTF8.GetString(Convert.FromBase64String(targetFile.EncodedContent));
+                    }
+                    else
+                    {
+                        currentFileText = targetFile.Content;
+                    }
+
+                    int result = 0;
+                    var newFileText = string.Format(CE_EDITOR.Text.ToString());
+                    var updateRequest = new UpdateFileRequest("DVM App Debug Push", newFileText, targetFile.Sha, branch);
+
+                    var updatefile = await github.Repository.Content.UpdateFile(owner, repo, "DavinkiServerPush.xml", updateRequest);
+
+                    string DST_V = "alle verbonden PC's";
+                    DATA_SENT_TITLE.Text = ("De data is verzonden naar " + DST_V + " met sucess!");
+                    PT_Send_Done.Visible = true;
+                }
+                catch
+                {
+                    var NI = new NI();
+                    NI.ShowDialog();
+                }
             }
         }
 
@@ -374,6 +400,11 @@ namespace DHCI
         {
             var PVT = new Foto();
             PVT.ShowDialog();
+        }
+
+        public void Logo_Click(object sender, EventArgs e)
+        {
+            Tab.Visible = true;
         }
     }
 }
