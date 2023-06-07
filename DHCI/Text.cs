@@ -12,18 +12,18 @@ using System.Windows.Forms;
 
 namespace DHCI
 {
-    public partial class Foto : Form
+    public partial class Text : Form
     {
         public static class ControlID
         {
-            public static string ImageData { get; set; }
+            public static string TextData { get; set; }
         }
 
-        public Foto()
+        public Text()
         {
             InitializeComponent();
 
-            Image.ImageLocation = ControlID.ImageData;
+            TextContent.Text = ControlID.TextData;
 
             System.Net.WebClient ginf = new System.Net.WebClient();
 
@@ -41,7 +41,7 @@ namespace DHCI
             {
                 using (var client = new WebClient())
                 {
-                    client.DownloadFile(GetLine(webData, 34), "Icon.ico");
+                    client.DownloadFile(GetLine(webData, 35), "Icon.ico");
                 }
 
                 using (var stream = File.OpenRead("Icon.ico"))

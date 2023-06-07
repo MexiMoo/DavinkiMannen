@@ -15,11 +15,28 @@ namespace DHCI
         {
             InitializeComponent();
             this.Text = String.Format("About {0}", AssemblyTitle);
-            this.labelProductName.Text = AssemblyProduct;
-            this.labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
+            this.labelProductName.Text = AssemblyProduct; 
             this.labelCopyright.Text = AssemblyCopyright;
             this.labelCompanyName.Text = AssemblyCompany;
-            this.textBoxDescription.Text = AssemblyDescription;
+            //this.textBoxDescription.Text = AssemblyDescription;
+            VRSLab();
+        }
+
+        private void VRSLab()
+        {
+            System.Net.WebClient ginf = new System.Net.WebClient();
+
+            byte[] raw = ginf.DownloadData("https://raw.githubusercontent.com/MexiMoo/DavinkiMannen/master/DavinkiData");
+
+            string webData = System.Text.Encoding.UTF8.GetString(raw);
+
+            string GetLine(string text, int lineNo)
+            {
+                string[] lines = text.Replace("\r", "").Split('\n');
+                return lines.Length >= lineNo ? lines[lineNo - 1] : null;
+            }
+
+            this.labelVersion.Text = String.Format("Version {0}", GetLine(webData, 7));
         }
 
         #region Assembly Attribute Accessors
@@ -101,5 +118,10 @@ namespace DHCI
             }
         }
         #endregion
+
+        private void tableLayoutPanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

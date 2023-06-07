@@ -6,12 +6,12 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("DHCI")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Made By: Max Rook")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("De Davinki Heren")]
 [assembly: AssemblyProduct("DHCI")]
-[assembly: AssemblyCopyright("Copyright © De Davinki Heren | 2022")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("Copyright © De Davinki Heren | 2022 - 2023")]
+[assembly: AssemblyTrademark("Copyright © Max Rook | 2022 - 2023")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible

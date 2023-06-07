@@ -1,6 +1,6 @@
 ﻿namespace DHCI
 {
-    partial class Foto
+    partial class Text
     {
         /// <summary>
         /// Required designer variable.
@@ -28,40 +28,36 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.Image = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.Image)).BeginInit();
+            this.TextContent = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // Image
+            // TextContent
             // 
-            this.Image.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Image.ErrorImage = global::DHCI.Properties.Resources.rbg_big;
-            this.Image.Image = global::DHCI.Properties.Resources.rbg_big;
-            this.Image.Location = new System.Drawing.Point(0, 0);
-            this.Image.Name = "Image";
-            this.Image.Size = new System.Drawing.Size(800, 450);
-            this.Image.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.Image.TabIndex = 0;
-            this.Image.TabStop = false;
+            this.TextContent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TextContent.Location = new System.Drawing.Point(0, 0);
+            this.TextContent.Name = "TextContent";
+            this.TextContent.Size = new System.Drawing.Size(800, 450);
+            this.TextContent.TabIndex = 0;
+            this.TextContent.Text = "Homo";
+            this.TextContent.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // Foto
+            // Text
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.Image);
-            this.Name = "Foto";
+            this.Controls.Add(this.TextContent);
+            this.Name = "Text";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Foto";
+            this.Text = "Een belangrijk bericht";
             this.TopMost = true;
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            ((System.ComponentModel.ISupportInitialize)(this.Image)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        public System.Windows.Forms.PictureBox Image;
+        private System.Windows.Forms.Label TextContent;
     }
 }

@@ -63,6 +63,16 @@ namespace DHCI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap DavinkiHeren {
+            get {
+                object obj = ResourceManager.GetObject("DavinkiHeren", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap rbg_big {
             get {
                 object obj = ResourceManager.GetObject("rbg-big", resourceCulture);

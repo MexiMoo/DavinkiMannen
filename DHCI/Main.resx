@@ -117,6 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="PT_Info.Text" xml:space="preserve">
+    <value>Type text, a video link or a image link into the textframe above to send it over to other pc's or just your own.
+
+Note that;
+To send an video or an image, only paste the image or video link and nothing else. Let it start with "https://" or it will send as plain text.
+To send text don't start with "https://" or it will try to send it as a image or video.
+
+Datainterval is 5 seconds, sending and receiving is delayed!</value>
+  </data>
+  <data name="wp_Label.Text" xml:space="preserve">
+    <value>To push content to other user's, please post an reaction (SINGLE LINED) to create an webpush. If you want to push a image or a video, start your single-line reaction with 'https://'. Make sure the link is valid or the push will not be iniciated!
+</value>
+  </data>
+  <data name="WebPusher.Url" xml:space="preserve">
+    <value>http://davinkiheren.nl/application/mobilepush/datapusher/zcf-jncrfujxn2r5u8x-adgkbpdsgvkyp3s6v9ybehmcqfthwmzq4t7wzcf-jandrgukxn2r5u8x-adgkbpeshvmyq3s6v9ybehmcqftjwnzr4u7wzcf-jandrgukxp2s5v8y-adgkbpeshvmyq3t6w9zcehmcqf</value>
+  </data>
   <metadata name="notifyIcon1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>

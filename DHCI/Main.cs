@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net.Sockets;
-using static DHCI.Foto;
+using static DHCI.Text;
 using Octokit;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TreeView;
 using System.Net;
@@ -22,16 +22,23 @@ using System.Runtime.InteropServices.ComTypes;
 using Microsoft.Win32;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace DHCI
 {
     partial class Main : Form
     {
+        //This token is for the BRNR account only. Using this token is useless exept for editing the GHrepository!
+        public string GithubToken = "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";
+
         private Timer tmr;
         private DownloadProgressChangedEventHandler wc_DownloadProgressChanged;
         private NotifyIcon trayIcon;
+        private Timer timer1;
+
 
         public string Link { get; private set; }
+        public string Dup { get; private set; }
 
         public Main()
         {
@@ -41,12 +48,14 @@ namespace DHCI
                 this.BackColor = Color.FromArgb(36, 36, 36);
                 PT.BackColor = Color.FromArgb(50, 50, 50);
                 CE.BackColor = Color.FromArgb(36, 36, 36);
+                wp_Label.BackColor = Color.FromArgb(36, 36, 36);
             }
             else
             {
                 this.BackColor = SystemColors.Control;
                 PT.BackColor = SystemColors.Control;
                 CE.BackColor = SystemColors.Control;
+                wp_Label.BackColor = SystemColors.Control;
             }
 
             BTNLab();
@@ -57,19 +66,181 @@ namespace DHCI
 
             var timer = new System.Threading.Timer((f) =>
             {
-                doUpdate();
+                //doUpdate();
             }, null, startTimeSpan, periodTimeSpan);
 
             string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"MRO");
             key.SetValue("Version", version);
             key.Close();
+
+            doUpdate();
+            WebPushTimer();
+            InitTimer();
+        }
+
+        public void WebPushTimer()
+        {
+            //var timerWP = new System.Threading.Timer(
+            //e => doUpdate(),
+            //null,
+            //TimeSpan.Zero,
+            //TimeSpan.FromMinutes(10));
+
+            var timerDU = new System.Threading.Timer(
+            e => WebPushReceive(),
+            null,
+            TimeSpan.Zero,
+            TimeSpan.FromMinutes(10));
+        }
+
+        public void WebPushReceive()
+        {
+            try
+            {
+                //string Dup = "";
+
+                //Gets raw data from the project
+                System.Net.WebClient wc = new System.Net.WebClient();
+
+                //Using this in a try/catch so the program won't crash if there is no internet.
+                System.Net.WebClient ginf = new System.Net.WebClient();
+
+                byte[] raw = ginf.DownloadData("http://davinkiheren.nl/application/mobilepush/datapusher/zcf-jncrfujxn2r5u8x-adgkbpdsgvkyp3s6v9ybehmcqfthwmzq4t7wzcf-jandrgukxn2r5u8x-adgkbpeshvmyq3s6v9ybehmcqftjwnzr4u7wzcf-jandrgukxp2s5v8y-adgkbpeshvmyq3t6w9zcehmcqf");
+
+                string webData = System.Text.Encoding.UTF8.GetString(raw);
+
+                string GetLine(string text, int lineNo)
+                {
+                    string[] lines = text.Replace("\r", "").Split('\n');
+                    return lines.Length >= lineNo ? lines[lineNo - 1] : null;
+                }
+
+                webData = webData.Replace("<div class=\"wp-block-comment-content\"><p>", "");
+                webData = webData.Replace("</p>", ""); // to replace the specific text with blank
+               //MessageBox.Show(GetLine(webData, 188));
+
+                if (Dup == GetLine(webData, 188))
+                {
+                    //Do nothing
+                    //MessageBox.Show("Duplicaat!");
+                }
+                else
+                {
+                    if (GetLine(webData, 188).StartsWith("https://"))
+                    {
+                        //MessageBox.Show("Dit is een link!");
+                        Video.ControlID.VideoData = GetLine(webData, 188);
+                        using (Video PVV = new Video())
+                        {
+                            if (PVV.ShowDialog() == DialogResult.OK)
+                            {
+                                //Data already called!
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //MessageBox.Show("Dit is text!");
+                        ControlID.TextData = GetLine(webData, 188);
+                        using (Text IVI = new Text())
+                        {
+                            if (IVI.ShowDialog() == DialogResult.OK)
+                            {
+                                //Data already called!
+                            }
+                        }
+                    }
+
+                    Dup = GetLine(webData, 188);
+                }
+
+                WebPushTimer();
+            }
+            catch
+            {
+                var NI = new NI();
+                NI.ShowDialog();
+            }
+        }
+
+        public void InitTimer()
+        {
+            timer1 = new Timer();
+            timer1.Tick += new EventHandler(timer1_Tick);
+            timer1.Interval = 5000; // in miliseconds
+            timer1.Start();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            getDSContent();
         }
 
         private void TrayMenuContext()
         {
             this.notifyIcon1.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
             this.notifyIcon1.ContextMenuStrip.Items.Add("About SystemIntergratedCycliManager...", null, (s, e) => MessageBox.Show("Null"));
+        }
+
+        private void DSdata()
+        {
+            WebClient client = new WebClient();
+            String webDataDS = client.DownloadString("https://github.com/MexiMoo/DavinkiMannen/blob/master/DavinkiServerPush.txt");
+            CE_EDITOR.Text = webDataDS;
+
+            //if (Properties.Settings.Default.DebugServer != webDataDS)
+            //{
+                //char[] array = webData.Take(8).ToArray();
+                //if (array.ToString() == "https://")
+                //{
+                //MessageBox.Show("ddd");
+                //}
+                //MessageBox.Show(array.ToString());
+
+                
+                //MessageBox.Show(Properties.Settings.Default.DebugServer);
+                //MessageBox.Show(webDataDS);
+                //Task.Delay(1000).ContinueWith(t => Properties.Settings.Default["DebugServer"] = "Test");
+                //Task.Delay(1000).ContinueWith(t => Properties.Settings.Default.Save());
+            //}
+            //else
+            //{
+                //Do nothing
+                //MessageBox.Show(Properties.Settings.Default.DebugServer);
+                //MessageBox.Show(webDataDS);
+            //}
+        }
+
+        private void getDSContent()
+        {
+            //Gets raw data from the project
+            System.Net.WebClient wc = new System.Net.WebClient();
+
+            //Using this in a try/catch so the program won't crash if there is no internet.
+            try
+            {
+                System.Net.WebClient ginf = new System.Net.WebClient();
+
+                byte[] raw = ginf.DownloadData("https://github.com/MexiMoo/DavinkiMannen/blob/master/DavinkiServerPush.txt");
+
+                string webData = System.Text.Encoding.UTF8.GetString(raw);
+
+                string GetLine(string text, int lineNo)
+                {
+                    string[] lines = text.Replace("\r", "").Split('\n');
+                    return lines.Length >= lineNo ? lines[lineNo - 1] : null;
+                }
+
+                string onlineAppVersion = GetLine(webData, 20);
+                CE_EDITOR.Text = GetLine(webData, 20);
+                //MessageBox.Show(GetLine(webData, 20));
+            }
+            catch
+            {
+                var NI = new NI();
+                NI.ShowDialog();
+            }
         }
 
         private void doUpdate()
@@ -109,6 +280,8 @@ namespace DHCI
                     if (appVersionLocal != onlineAppVersion)
                     {
                         //update
+                        MessageBox.Show("There is an update!");
+                        Process.Start("https://github.com/MexiMoo/DavinkiMannen/releases/latest");
                     }
                     else
                     {
@@ -141,17 +314,22 @@ namespace DHCI
             BTN2.Text = GetLine(webData, 17);
             BTN3.Text = GetLine(webData, 18);
             BTN4.Text = GetLine(webData, 19);
-            this.Text = GetLine(webData, 22);
-            Logo.ImageLocation = GetLine(webData, 28);
-            Foto.ImageLocation = GetLine(webData, 25);
-            CE_T.Text = GetLine(webData, 31);
-            Link = GetLine(webData, 37);
+            BTN5.Text = GetLine(webData, 20);
+            this.Text = GetLine(webData, 23);
+            Logo.ImageLocation = GetLine(webData, 29);
+            Foto.ImageLocation = GetLine(webData, 26);
+            CE_T.Text = GetLine(webData, 32);
+            Link = GetLine(webData, 38);
             
             try
             {
+                WMPLib.WindowsMediaPlayer wplayer = new WMPLib.WindowsMediaPlayer();
+                wplayer.URL = "BG.mp3";
+                wplayer.controls.play();
+
                 using (var client = new WebClient())
                 {
-                    client.DownloadFile(GetLine(webData, 34), "Icon.ico");
+                    client.DownloadFile(GetLine(webData, 35), "Icon.ico");
                 }
 
                 using (var stream = File.OpenRead("Icon.ico"))
@@ -197,27 +375,6 @@ namespace DHCI
             Process.Start("https://github.com/MexiMoo/DavinkiMannen/blob/master/DavinkiData");
         }
 
-        private void PT_IMAGE_RB_MouseClick(object sender, MouseEventArgs e)
-        {
-            PT_VIDEO_RB.Checked = false;
-            PT_TEXT_RB.Checked = false;
-            PT_IMAGE_RB.Checked = true;
-        }
-
-        private void PT_VIDEO_RB_MouseClick(object sender, MouseEventArgs e)
-        {
-            PT_IMAGE_RB.Checked = false;
-            PT_TEXT_RB.Checked = false;
-            PT_VIDEO_RB.Checked = true;
-        }
-
-        private void PT_TEXT_RB_MouseClick(object sender, MouseEventArgs e)
-        {
-            PT_IMAGE_RB.Checked = false;
-            PT_VIDEO_RB.Checked = false;
-            PT_TEXT_RB.Checked = true;
-        }
-
         private void PT_SEND_L_MouseClick(object sender, MouseEventArgs e)
         {
             PT_SEND_L.Checked = true;
@@ -246,11 +403,11 @@ namespace DHCI
                     var repo = "DavinkiMannen";
                     var branch = "master";
                     var github = new GitHubClient(new ProductHeaderValue("AppData"));
-                    github.Credentials = new Credentials("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");
+                    github.Credentials = new Credentials(GithubToken);
 
                     var currentFileText = "";
 
-                    var contents = await github.Repository.Content.GetAllContentsByRef(owner, repo, "DavinkiServerPush.xml", branch);
+                    var contents = await github.Repository.Content.GetAllContentsByRef(owner, repo, "DavinkiServerPush.txt", branch);
                     var targetFile = contents[0];
                     if (targetFile.EncodedContent != null)
                     {
@@ -262,10 +419,10 @@ namespace DHCI
                     }
 
                     int result = 0;
-                    var newFileText = string.Format(CE_EDITOR.Text.ToString());
+                    var newFileText = string.Format(PT_TEXT_TB.Text.ToString());
                     var updateRequest = new UpdateFileRequest("DVM App Debug Push", newFileText, targetFile.Sha, branch);
 
-                    var updatefile = await github.Repository.Content.UpdateFile(owner, repo, "DavinkiServerPush.xml", updateRequest);
+                    var updatefile = await github.Repository.Content.UpdateFile(owner, repo, "DavinkiServerPush.txt", updateRequest);
 
                     string DST_V = "alle verbonden PC's";
                     DATA_SENT_TITLE.Text = ("De data is verzonden naar " + DST_V + " met sucess!");
@@ -290,6 +447,10 @@ namespace DHCI
             {
                 TC.Visible = true;
                 TC.SelectedIndex = 2;
+                MessageBox.Show("This is an old debug page you found! This page is no longer in use by the program but still presists.");
+                TC.SelectedIndex = 0;
+                Tab.Visible = false;
+                Tab.SelectedTab = TB1;
             }
             else
             {
@@ -317,7 +478,7 @@ namespace DHCI
                 var repo = "DavinkiMannen";
                 var branch = "master";
                 var github = new GitHubClient(new ProductHeaderValue("AppData"));
-                github.Credentials = new Credentials("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");
+                github.Credentials = new Credentials(GithubToken);
 
                 var currentFileText = "";
 
@@ -374,8 +535,8 @@ namespace DHCI
 
         private void PT_IMAGE_B_Click(object sender, EventArgs e)
         {
-            ControlID.ImageData = PT_IMAGE_TB.Text;
-            using (Foto PVI = new Foto())
+            //ControlID.ImageData = PT_TEXT_TB.Text;
+            using (Text PVI = new Text())
             {
                 if (PVI.ShowDialog() == DialogResult.OK)
                 {
@@ -386,7 +547,7 @@ namespace DHCI
 
         private void PT_VIDEO_B_Click(object sender, EventArgs e)
         {
-            Video.ControlID.VideoData = PT_VIDEO_TB.Text;
+            Video.ControlID.VideoData = PT_TEXT_TB.Text;
             using (Video PVV = new Video())
             {
                 if (PVV.ShowDialog() == DialogResult.OK)
@@ -398,13 +559,47 @@ namespace DHCI
 
         private void PT_TEXT_B_Click(object sender, EventArgs e)
         {
-            var PVT = new Foto();
+            var PVT = new Text();
             PVT.ShowDialog();
         }
 
         public void Logo_Click(object sender, EventArgs e)
         {
+            
+        }
+
+        private void panel3_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void sInfo_Click(object sender, EventArgs e)
+        {
+            var INF = new About();
+            INF.ShowDialog();
+        }
+
+        private void BTN5_Click(object sender, EventArgs e)
+        {
+            TC.Visible = true;
+            TC.SelectedIndex = 3;
+        }
+
+        private void Logo_DoubleClick(object sender, EventArgs e)
+        {
+            var INF = new About();
+            INF.ShowDialog();
+        }
+
+        private void panel3_DoubleClick(object sender, EventArgs e)
+        {
             Tab.Visible = true;
+        }
+
+        private void HPNL_Settings_Click(object sender, EventArgs e)
+        {
+            var STG = new Settings();
+            STG.ShowDialog();
         }
     }
 }

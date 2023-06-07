@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Media;
 using System.Net;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -25,9 +26,8 @@ namespace DHCI
         {
             InitializeComponent();
 
-            Vplayer.Visible = true;
-            Vplayer.URL = ControlID.VideoData;
-            Vplayer.Ctlcontrols.play();
+            //PlayFile(ControlID.VideoData);
+            PlayFile(@"c:\myaudio.wma");
 
             System.Net.WebClient ginf = new System.Net.WebClient();
 
@@ -45,7 +45,7 @@ namespace DHCI
             {
                 using (var client = new WebClient())
                 {
-                    client.DownloadFile(GetLine(webData, 34), "Icon.ico");
+                    client.DownloadFile(GetLine(webData, 35), "Icon.ico");
                 }
 
                 using (var stream = File.OpenRead("Icon.ico"))
@@ -57,6 +57,39 @@ namespace DHCI
             {
                 //Nothing
             }
+        }
+
+        WMPLib.WindowsMediaPlayer Player;
+
+        private void PlayFile(String url)
+        {
+            Player = new WMPLib.WindowsMediaPlayer();
+            Player.PlayStateChange +=
+                new WMPLib._WMPOCXEvents_PlayStateChangeEventHandler(Player_PlayStateChange);
+            Player.MediaError +=
+                new WMPLib._WMPOCXEvents_MediaErrorEventHandler(Player_MediaError);
+            Player.URL = url;
+            Player.controls.play();
+        }
+
+        private void Form1_Load(object sender, System.EventArgs e)
+        {
+            // TODO  Insert a valid path in the line below.
+            PlayFile(@"c:\myaudio.wma");
+        }
+
+        private void Player_PlayStateChange(int NewState)
+        {
+            if ((WMPLib.WMPPlayState)NewState == WMPLib.WMPPlayState.wmppsStopped)
+            {
+                this.Close();
+            }
+        }
+
+        private void Player_MediaError(object pMediaObject)
+        {
+            var NI = new NI();
+            NI.ShowDialog();
         }
     }
 }
